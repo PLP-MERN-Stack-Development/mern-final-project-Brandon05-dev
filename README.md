@@ -1,9 +1,9 @@
 # AgriSmart: Farmer Marketplace & Pricing 🌾
 
 > **Full-Stack MERN Capstone Project**  
-> Secure, responsive marketplace connecting Farmers and Buyers
+> Secure, responsive marketplace connecting Farmers and Buyers with real-time updates
 
-**Project Status:** Phase 1 Complete ✅ | [View Detailed Status](PROJECT_STATUS.md)
+**Project Status:** All Phases Complete ✅ | [View Deployment Guide](DEPLOYMENT.md)
 
 ---
 
@@ -17,20 +17,16 @@
 
 ### Core Features
 
-✅ **Phase 1 - Completed:**
-- Secure user authentication (JWT-based)
-- Role-based authorization (Farmer/Buyer)
-- User registration and login
-- Protected API routes
-- MongoDB integration
-
-🚧 **Upcoming Phases:**
-- Phase 2: Product CRUD & Market Pricing
-- Phase 3: Order System & Real-Time Updates
-- Phase 4: Backend Testing (Jest/Supertest)
-- Phase 5: React Frontend & Auth UI
-- Phase 6: Marketplace UI & Real-Time Features
-- Phase 7: Deployment & Documentation
+✅ **Completed Features:**
+- ✅ Secure user authentication (JWT-based)
+- ✅ Role-based authorization (Farmer/Buyer)
+- ✅ Product CRUD with search and filtering
+- ✅ Order management system
+- ✅ Real-time notifications (Socket.io)
+- ✅ Market price tracking
+- ✅ Responsive React frontend
+- ✅ Protected routes
+- ✅ Comprehensive test suite (27/27 tests passing)
 
 ---
 
@@ -38,22 +34,21 @@
 
 ### Backend
 - **Runtime:** Node.js
-- **Framework:** Express.js
-- **Database:** MongoDB (Mongoose ODM)
-- **Authentication:** JWT (JSON Web Tokens)
-- **Real-Time:** Socket.io
-- **Security:** bcryptjs, CORS
+- **Framework:** Express.js 4.18.2
+- **Database:** MongoDB with Mongoose 8.0.0
+- **Authentication:** JWT 9.0.2 + bcryptjs 2.4.3
+- **Real-Time:** Socket.io 4.6.1
+- **Testing:** Jest 29.7.0 + Supertest 6.3.3
+- **Security:** CORS 2.8.5
 
-### Frontend (Phase 5+)
-- **Library:** React.js (Hooks)
-- **Routing:** React Router DOM
-- **HTTP Client:** Axios
+### Frontend
+- **Library:** React 18.2.0
+- **Build Tool:** Vite 5.0.0
+- **Routing:** React Router DOM 6.14.1
+- **HTTP Client:** Axios 1.4.0
 - **Styling:** Tailwind CSS
+- **Real-Time:** socket.io-client 4.6.1
 - **State Management:** Context API
-
-### Testing
-- **Backend:** Jest, Supertest
-- **Frontend:** React Testing Library
 
 ---
 
@@ -61,7 +56,7 @@
 
 ### Prerequisites
 
-- Node.js v16+ ([Download](https://nodejs.org/))
+- Node.js v18+ ([Download](https://nodejs.org/))
 - MongoDB ([Local Installation](https://www.mongodb.com/docs/manual/installation/) or [Atlas Account](https://www.mongodb.com/cloud/atlas))
 - Git
 
@@ -77,16 +72,16 @@
    ```bash
    cd backend
    npm install
+   cp .env.example .env
+   # Edit .env with your MongoDB URI and JWT secret
    ```
 
-3. **Configure Environment**
-   
-   Update `backend/.env` with your settings:
-   ```env
-   PORT=5000
-   MONGO_URI=mongodb://localhost:27017/agrismart
-   JWT_SECRET=your_super_secret_jwt_key_here
-   NODE_ENV=development
+3. **Setup Frontend**
+   ```bash
+   cd ../frontend
+   npm install
+   cp .env.example .env
+   # Edit .env with your backend URL
    ```
 
 4. **Start MongoDB** (if running locally)
@@ -94,55 +89,39 @@
    mongod
    ```
 
-5. **Run the Backend Server**
+5. **Run the Application**
+   
+   Terminal 1 (Backend):
    ```bash
+   cd backend
+   node server.js
+   ```
+   
+   Terminal 2 (Frontend):
+   ```bash
+   cd frontend
    npm run dev
    ```
 
-   Server will be available at: `http://localhost:5000`
+6. **Access the Application**
+   - Frontend: http://localhost:5173
+   - Backend API: http://localhost:5000
 
 ---
 
-## 🧪 Testing the API
+## 🧪 Testing
 
-### Automated Test Suite
+### Backend Test Suite (27 Tests)
 
 ```bash
 cd backend
-./test-api.sh
+npm test
 ```
 
-### Manual Testing (curl examples)
-
-**Register a Farmer:**
-```bash
-curl -X POST http://localhost:5000/api/v1/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "John Farmer",
-    "email": "farmer@example.com",
-    "password": "securepass123",
-    "role": "Farmer",
-    "location": "Nairobi, Kenya",
-    "phone": "+254712345678"
-  }'
-```
-
-**Login:**
-```bash
-curl -X POST http://localhost:5000/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "farmer@example.com",
-    "password": "securepass123"
-  }'
-```
-
-**Get Profile (Protected):**
-```bash
-curl -X GET http://localhost:5000/api/v1/auth/me \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
-```
+**Test Coverage:**
+- ✅ Unit Tests: Password hashing, JWT generation/verification (7 tests)
+- ✅ Integration Tests: Product CRUD operations (10 tests)
+- ✅ Integration Tests: Order management (10 tests)
 
 ---
 
@@ -151,21 +130,57 @@ curl -X GET http://localhost:5000/api/v1/auth/me \
 ```
 mern-final-project-Brandon05-dev/
 ├── backend/
-│   ├── controllers/       # Business logic
+│   ├── __tests__/
+│   │   ├── unit/
+│   │   │   └── auth.test.js
+│   │   └── integration/
+│   │       ├── product.test.js
+│   │       └── order.test.js
+│   ├── controllers/
+│   │   ├── auth.js
+│   │   ├── product.js
+│   │   ├── order.js
+│   │   └── marketPrice.js
+│   ├── middleware/
 │   │   └── auth.js
-│   ├── middleware/        # Custom middleware
-│   │   └── auth.js
-│   ├── models/            # Database schemas
-│   │   └── User.js
-│   ├── routes/            # API routes
-│   │   └── auth.js
-│   ├── .env               # Environment variables
-│   ├── server.js          # Server entry point
-│   ├── package.json       # Dependencies
-│   └── README.md          # Backend docs
-├── frontend/              # (Phase 5+)
-├── PROJECT_STATUS.md      # Detailed status
-└── README.md              # This file
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Product.js
+│   │   ├── Order.js
+│   │   └── MarketPrice.js
+│   ├── routes/
+│   │   ├── auth.js
+│   │   ├── product.js
+│   │   ├── order.js
+│   │   └── marketPrice.js
+│   ├── .env.example
+│   ├── server.js
+│   ├── jest.config.js
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── ProtectedRoute.jsx
+│   │   │   ├── NotificationBell.jsx
+│   │   │   ├── FarmerProducts.jsx
+│   │   │   ├── FarmerOrders.jsx
+│   │   │   └── BuyerOrders.jsx
+│   │   ├── context/
+│   │   │   ├── AuthContext.jsx
+│   │   │   └── SocketContext.jsx
+│   │   ├── pages/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── Marketplace.jsx
+│   │   │   └── Dashboard.jsx
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── .env.example
+│   ├── vite.config.js
+│   └── package.json
+├── DEPLOYMENT.md
+├── PROJECT_STATUS.md
+└── README.md
 ```
 
 ---
@@ -176,83 +191,227 @@ mern-final-project-Brandon05-dev/
 
 | Method | Endpoint | Access | Description |
 |--------|----------|--------|-------------|
-| POST | `/api/v1/auth/register` | Public | Register new user |
-| POST | `/api/v1/auth/login` | Public | Login user |
-| GET | `/api/v1/auth/me` | Private | Get user profile |
+| POST | `/api/v1/auth/register` | Public | Register new user (Farmer/Buyer) |
+| POST | `/api/v1/auth/login` | Public | Login user, returns JWT token |
+| GET | `/api/v1/auth/me` | Private | Get authenticated user profile |
 
-### Health Check
+### Product Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/v1/health` | Server status |
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| GET | `/api/v1/products` | Public | Get all products (with filters) |
+| GET | `/api/v1/products/:id` | Public | Get single product |
+| POST | `/api/v1/products` | Farmer | Create new product |
+| PUT | `/api/v1/products/:id` | Farmer (Owner) | Update product |
+| DELETE | `/api/v1/products/:id` | Farmer (Owner) | Delete product |
+| GET | `/api/v1/products/farmer/my-products` | Farmer | Get farmer's products |
 
-Full API documentation: [Backend README](backend/README.md)
+### Order Endpoints
+
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| POST | `/api/v1/orders` | Buyer | Create new order |
+| GET | `/api/v1/orders/buyer` | Buyer | Get buyer's orders |
+| GET | `/api/v1/orders/farmer` | Farmer | Get farmer's received orders |
+| PUT | `/api/v1/orders/:id/status` | Farmer | Update order status |
+| PUT | `/api/v1/orders/:id/cancel` | Buyer/Farmer | Cancel order |
+
+### Market Price Endpoints
+
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| GET | `/api/v1/market-prices` | Public | Get market prices |
+| POST | `/api/v1/market-prices` | Private | Create market price |
+
+### Real-Time Events (Socket.io)
+
+| Event | Trigger | Description |
+|-------|---------|-------------|
+| `newOrder` | Order created | Notify farmer of new order |
+| `orderStatusUpdated` | Status changed | Notify buyer of status change |
+| `orderCancelled` | Order cancelled | Notify relevant party |
 
 ---
 
 ## 🗄️ Database Models
 
-### User Model (Phase 1)
-
+### User Model
 ```javascript
 {
-  name: String,      // Required, 2-50 chars
-  email: String,     // Required, unique
-  password: String,  // Required, hashed
-  role: String,      // 'Farmer' or 'Buyer'
-  location: String,  // Required
-  phone: String,     // Optional
-  isActive: Boolean, // Default: true
-  timestamps: true   // Auto-generated
+  name: String,           // Required, 2-50 chars
+  email: String,          // Required, unique
+  password: String,       // Required, hashed with bcrypt
+  role: String,           // Enum: 'Farmer' or 'Buyer'
+  location: String,       // Required
+  phone: String,          // Optional
+  isActive: Boolean,      // Default: true
+  createdAt: Date,        // Auto-generated
+  updatedAt: Date         // Auto-generated
+}
+```
+
+### Product Model
+```javascript
+{
+  name: String,           // Required
+  description: String,    // Required
+  category: String,       // Required
+  price: Number,          // Required, min: 0
+  quantity: Number,       // Required, min: 0
+  unit: String,           // Required (kg, liters, pieces)
+  farmer: ObjectId,       // Ref: User
+  inStock: Boolean,       // Auto-updated based on quantity
+  images: [String],       // Optional URLs
+  location: String,       // Required
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### Order Model
+```javascript
+{
+  buyer: ObjectId,        // Ref: User
+  farmer: ObjectId,       // Ref: User
+  product: ObjectId,      // Ref: Product
+  quantity: Number,       // Required, min: 1
+  totalPrice: Number,     // Auto-calculated
+  status: String,         // Enum: pending, confirmed, processing, shipped, delivered, cancelled
+  deliveryAddress: String,// Required
+  deliveredAt: Date,      // Auto-set when delivered
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### MarketPrice Model
+```javascript
+{
+  productCategory: String,// Required
+  averagePrice: Number,   // Required
+  region: String,         // Required
+  lastUpdated: Date,      // Auto-generated
 }
 ```
 
 ---
 
-## ✅ Phase 1 Completion Checklist
-
-- [x] Backend project initialization
-- [x] Express server setup
-- [x] MongoDB connection
-- [x] User model with validation
-- [x] Password hashing (bcrypt)
-- [x] JWT authentication
-- [x] Registration endpoint
-- [x] Login endpoint
-- [x] Protected routes middleware
-- [x] Role-based authorization
-- [x] API testing script
-- [x] Documentation
-
----
-
-## 📝 Development Progress
+## ✅ All Phases Complete
 
 | Phase | Status | Description |
 |-------|--------|-------------|
 | Phase 1 | ✅ Complete | Backend Foundation & Authentication |
-| Phase 2 | 🔜 Next | Product CRUD & Market Pricing |
-| Phase 3 | ⏳ Pending | Orders & Real-Time (Socket.io) |
-| Phase 4 | ⏳ Pending | Backend Testing |
-| Phase 5 | ⏳ Pending | React Frontend & Auth UI |
-| Phase 6 | ⏳ Pending | Marketplace UI & Real-Time |
-| Phase 7 | ⏳ Pending | Deployment & Documentation |
+| Phase 2 | ✅ Complete | Product CRUD & Market Pricing |
+| Phase 3 | ✅ Complete | Orders & Real-Time (Socket.io) |
+| Phase 4 | ✅ Complete | Backend Testing (27/27 passing) |
+| Phase 5 | ✅ Complete | React Frontend & Auth UI |
+| Phase 6 | ✅ Complete | Marketplace UI & Real-Time Features |
+| Phase 7 | ✅ Complete | Testing & Deployment Preparation |
 
-[View detailed progress →](PROJECT_STATUS.md)
-
----
-
-## 🎥 Project Demonstration
-
-> Video demonstration will be added in Phase 7
+[View deployment guide →](DEPLOYMENT.md)
 
 ---
 
-## 🌐 Live Deployment
+## 🚀 Deployment
 
-> Deployment links will be added in Phase 7
+See [DEPLOYMENT.md](DEPLOYMENT.md) for comprehensive deployment instructions covering:
+- Render (Free tier available)
+- Railway
+- VPS (DigitalOcean, AWS)
+- MongoDB Atlas setup
+- Environment configuration
+- SSL/HTTPS setup
+- Monitoring and maintenance
 
-**Backend:** TBD  
-**Frontend:** TBD
+---
 
---- 
+## 🎥 Features Showcase
+
+### For Farmers:
+- Create and manage product listings
+- View and update incoming orders
+- Receive real-time order notifications
+- Track inventory levels
+- View market prices
+
+### For Buyers:
+- Browse marketplace with search/filter
+- Place orders directly from product listings
+- Track order status in real-time
+- View order history
+- Receive status update notifications
+
+### Real-Time Features:
+- 🔔 Instant notifications for new orders
+- 🔔 Order status change alerts
+- 🔔 Live updates without page refresh
+
+---
+
+## 🔒 Security Features
+
+- ✅ Password hashing with bcrypt (10 salt rounds)
+- ✅ JWT token-based authentication (30-day expiration)
+- ✅ Protected routes with middleware
+- ✅ Role-based access control
+- ✅ CORS configuration
+- ✅ Input validation on all endpoints
+- ✅ MongoDB injection protection
+
+---
+
+## 🧪 Testing Results
+
+**All 27 Tests Passing ✅**
+
+```
+Test Suites: 3 passed, 3 total
+Tests:       27 passed, 27 total
+Time:        14.007 s
+
+✅ Auth Unit Tests (7 tests)
+✅ Product Integration Tests (10 tests)
+✅ Order Integration Tests (10 tests)
+```
+
+---
+
+## 📚 Documentation
+
+- [Backend API Documentation](backend/README.md)
+- [Frontend Documentation](frontend/README.md)
+- [Deployment Guide](DEPLOYMENT.md)
+- [Project Status](PROJECT_STATUS.md)
+
+---
+
+## 🤝 Contributing
+
+This is a capstone project for educational purposes. However, feedback and suggestions are welcome!
+
+---
+
+## 📄 License
+
+This project is developed as part of the PLP MERN Stack Development course.
+
+---
+
+## 👨‍💻 Developer
+
+**Brandon**  
+PLP MERN Stack Development Program  
+GitHub: [@Brandon05-dev](https://github.com/PLP-MERN-Stack-Development/mern-final-project-Brandon05-dev)
+
+---
+
+## 🙏 Acknowledgments
+
+- PLP Academy for the comprehensive MERN stack curriculum
+- MongoDB for the excellent database documentation
+- The React and Express.js communities
+
+---
+
+**🌾 AgriSmart - Empowering Farmers, Connecting Communities**
+ 
